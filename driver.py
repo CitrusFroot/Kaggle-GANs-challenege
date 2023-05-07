@@ -1,46 +1,44 @@
 import tensorflow as tf
+import tensorflow_datasets as tfds
 import numpy as np
 import csv
-
+import matplotlib.pyplot as plt
+from sklearn import datasets
+from sklearn.decomposition import PCA
+from sklearn.preprocessing import StandardScaler
 
 def main():
-  xy, apply = loadData()
-  visualizeData(xy)
-  train()
+  monetData = loadData('gan-getting-started\monet_jpg')
+  photoData = loadData('gan-getting-started\photo_jpg')
 
-#loads image data from tfrec files
-#useJPG: boolean, determines if we use jpgs instead of tfrec files
+  visualizeData(monetData)
+
+#loads image data from files
 #returns: 2 tf.data.Dataset objects, one holding the training data and the other holding images to be transformed
-def loadData(useJPG = 0):
-    if(useJPG == 0): #loads in the dataset from .tfrec files
-        trainingDataset = tf.data.TFRecordDataset('gan-getting-started\monet_tfrec').shuffle(buffer_size = 300).batch(BATCHSIZE)
-        trainingDataset = (trainingDataset.take(np.int64((1 - VALIDATIONSPLIT) * 300)),   #training split
-                           trainingDataset.skip(np.int64((1 - VALIDATIONSPLIT) * 300)))   #testing split
-        transformDataset = tf.data.TFRecordDataset('gan-getting-started\photo_tfrec').batch(BATCHSIZE)
-        return trainingDataset, transformDataset
-    
-    else: #we want to use jpgs
-        trainingDataset = tf.keras.utils.image_dataset_from_directory(directory= 'gan-getting-started\monet_jpg',
-                                                                      labels = 'inferred',
-                                                                      color_mode = 'rgb',
-                                                                      batch_size = BATCHSIZE,
-                                                                      image_size = IMAGESIZE,
-                                                                      shuffle = True,
-                                                                      seed = 1912,
-                                                                      validation_split= VALIDATIONSPLIT)
-        
-        transformDataset = tf.keras.utils.image_dataset_from_directory(directory= 'gan-getting-started\photo_jpg',
-                                                                      labels = 'inferred',
-                                                                      color_mode = 'rgb',
-                                                                      batch_size = BATCHSIZE,
-                                                                      image_size = IMAGESIZE,
-                                                                      shuffle = False,
-                                                                      validation_split= None)
-        return trainingDataset, transformDataset
+def loadData(address):
+    dataset = tf.keras.utils.image_dataset_from_directory(directory = address,
+                                                          labels = None,
+                                                          color_mode = 'rgb',
+                                                          image_size = IMAGESIZE,
+                                                          batch_size = BATCHSIZE,
+                                                          shuffle = False,
+                                                          validation_split = None)
+    dataset = dataset.map(lambda x: x/255) #normalizes the data
+    return dataset
 
-
+#visualizes the data and produces a PCA
 def visualizeData(dataset):
-   print(tf.)
+    fig = plt.figure(figsize = [5,5])
+    plt.title('9 Entries in data')
+    
+    
+    for i, element in enumerate(next(iter(dataset))):
+        if(i < 9):
+            fig.add_subplot(3,3,i+1)
+            plt.imshow(element)
+            plt.axis('off')
+
+    plt.savefig('savedInfo/nineExamples.png')
 
 def generateArt():
    pass
@@ -50,8 +48,29 @@ def train():
 
 
 if __name__ == "__main__":
-    IMAGESIZE = 0
+    IMAGESIZE = (256,256)
     BATCHSIZE = 64
+    NUMBATCHES = np.ceil((300/BATCHSIZE))
     EPOCHS = 100
     VALIDATIONSPLIT = 0.3
+
+    try:
+        tpu = tf.distribute.cluster_resolver.TPUClusterResolver()
+        print('Device:', tpu.master())
+        tf.config.experimental_connect_to_cluster(tpu)
+        tf.tpu.experimental.initialize_tpu_system(tpu)
+        strategy = tf.distribute.experimental.TPUStrategy(tpu)
+    except:
+        strategy = tf.distribute.get_strategy()
+
+    print('Number of replicas:', strategy.num_replicas_in_sync)
+
+    AUTOTUNE = tf.data.experimental.AUTOTUNE
+
     main()
+
+
+'''
+============== CREDITS =============
+
+'''
