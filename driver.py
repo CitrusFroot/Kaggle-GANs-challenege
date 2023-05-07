@@ -26,11 +26,12 @@ def loadData(address):
     dataset = dataset.map(lambda x: x/255) #normalizes the data
     return dataset
 
-#visualizes the data and produces a PCA
+#visualizes the first 9 entries of a dataset
+#dataset: a tf.data.Dataset
+#saves a png of 9 examples of data
 def visualizeData(dataset):
-    fig = plt.figure(figsize = [5,5])
+    fig = plt.figure(figsize = [5,5]) #sets size of figure
     plt.title('9 Entries in data')
-    
     
     for i, element in enumerate(next(iter(dataset))):
         if(i < 9):
@@ -39,6 +40,10 @@ def visualizeData(dataset):
             plt.axis('off')
 
     plt.savefig('savedInfo/nineExamples.png')
+
+def getPCA(dataset):
+   #TODO
+   pass
 
 def generateArt():
    pass
