@@ -4,8 +4,9 @@ import pandas as pd
 import tensorflow as tf
 from tensorflow import keras
 
-def generalConv():
+def generalConv(poolSize, hyperparameterData):
     pass
+    
 
 def generalDense():
     pass
@@ -13,7 +14,7 @@ def generalDense():
 def generalRes():
     pass
 
-def vanillaGAN(x, xtarget, poolSize): #for experience
+def vanillaGAN(x, xtarget, poolSize, hyperparameterData): #for experience
     ''' =========== Legend =========
     filter: an extracted feature/pattern of an image; called a kernel; = to a neuron when trained
     kernel_size: dimensions of the matrix of weights
@@ -24,6 +25,9 @@ def vanillaGAN(x, xtarget, poolSize): #for experience
     pass
 
 def cycleGAN(x, xtarget, poolSize): #designed for image-to-image translations. Recommended by Kaggle
+    pass
+
+def doCycle(domainA, generatorA, domainB, generatorB):
     pass
 
 def deepConvGAN(x, xtarget, poolSize): #for experience
