@@ -17,7 +17,10 @@ def main():
   visualizeData(photoData, 0)
 
   discriminatorA = GAN.makeDiscriminator(IMAGE_SIZE, HYPERPARAMETER_DATA) #monet
+  generatorA     = GAN.makeGenerator(IMAGE_SIZE, HYPERPARAMETER_DATA, NUM_RES_BLOCKS)
+
   discriminatorB = GAN.makeDiscriminator(IMAGE_SIZE, HYPERPARAMETER_DATA) #normal
+  generatorB     = GAN.makeGenerator(IMAGE_SIZE, HYPERPARAMETER_DATA, NUM_RES_BLOCKS)
 
 #loads image data from files
 #returns: 2 tf.data.Dataset objects, one holding the training data and the other holding images to be transformed
@@ -73,8 +76,9 @@ if __name__ == "__main__":
     STRIDE_1      = (1,1)
     STRIDE_2      = (2,2)
     STRIDE_3      = (4,4)
-    ALPHA = 0.2
-    EPSILON = 1e-3
+    ALPHA         = 0.2
+    EPSILON       = 1e-3
+    NUM_RES_BLOCKS= 9
 
     HYPERPARAMETER_DATA = [FILTERS, KERNEL_SIZE_1, KERNEL_SIZE_2, KERNEL_SIZE_3, PADDING, STRIDE_1, STRIDE_2, STRIDE_3, ALPHA, EPSILON]
 
