@@ -24,8 +24,12 @@ def createLogger(level:str, dir:str):
     
     logFileHandler = logging.FileHandler(f'{dir}/log{now}.log') #creates the log file and writes/appends to it
     logFileHandler.setLevel(levelDict[level])
+    logFileHandlerW = logging.FileHandler(f'{dir}/log{now}.log') #creates the log file and writes/appends to it
+    logFileHandlerW.setLevel(levelDict['warn'])
     formatter = logging.Formatter("%(asctime)s | %(levelname)s: %(message)s") #creates the format of how the logger will record debug messages
     logFileHandler.setFormatter(formatter)
+    logFileHandlerW.setFormatter(formatter)
     logger.addHandler(logFileHandler)
+    logger.addHandler(logFileHandlerW)
 
     return logger

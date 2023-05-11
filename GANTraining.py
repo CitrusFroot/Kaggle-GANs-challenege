@@ -22,7 +22,7 @@ numResBlocks: an int; determines how many residual blocks are used
 returns: a tf.keras.model instance. UNTRAINED
 '''
 def makeGenerator(imgDim:tuple|list, hyperparameterData:tuple|list, numResBlocks:int):
-    logger.info(f'makeGenerator called.\timgDim: {imgDim}\n')
+    logger.info(f'makeGenerator called.\timgDim: {imgDim}')
     filters    = hyperparameterData[0]
     kernelDim1 = hyperparameterData[1] #first kernel
     kernelDim2 = hyperparameterData[2] #kernel used for all other layers
@@ -57,9 +57,9 @@ def makeGenerator(imgDim:tuple|list, hyperparameterData:tuple|list, numResBlocks
     layer = keras.layers.LeakyReLU(alpha = alpha)(layer)
     logger.info(f'hConvLayer2 created. Value: {layer}\tTarget activation size: (64, 64, 256)')
 
-    #adds x amount of residual layers. 9 for 256x256 TODO: verify math and find evidence to back up
+    #adds x amount of residual layers. 9 for 256x256 TODO: verify math and find evidence to back up. !!!STRIDE MUST BE (1,1) given everything else is standard
     for _ in range(numResBlocks):
-        layer = getResNetBlock(imgDim[0], kernelDim2, stride2, padding, epsilon, layer) #when finished, layer's activation size should be (64,64,256)
+        layer = getResNetBlock(imgDim[0], kernelDim2, stride1, padding, epsilon, layer) #when finished, layer's activation size should be (64,64,256)
     
     #we transpose to upscale the image. Every conv2D layer decreases the dimension of the image. These two layers restore the original dimensions
     layer = keras.layers.Conv2DTranspose(filters = filters*2, kernel_size = kernelDim2, strides = stride2, padding = padding, output_padding = (1,1), kernel_initializer = weightInit)(layer)
@@ -76,7 +76,11 @@ def makeGenerator(imgDim:tuple|list, hyperparameterData:tuple|list, numResBlocks
     #compiles the untrained model and returns it to driver.py
     model = keras.Model(input, layer)
     model.compile(optimizer = 'adam', loss = 'mse')
-    logger.info(f'Generator Summary: {model.summary}')
+    logger.info(f'Generator Summary: {str(model.summary)}')
+    with open('savedInfo/generatorSummary.json', mode = 'w') as saveModel:
+        saveModel.write(model.to_json())
+    #save model: figure out why its not working
+    #keras.utils.plot_model(model = model, to_file = 'savedInfo/generator.png', show_shapes = True, show_layer_names = True, show_layer_activations = True)
 
 '''
 helper function for makeGenerator. Creates the residual blocks
@@ -88,18 +92,18 @@ epsilon: a float that represents the learning rate of the model
 input:   a keras.layers.Layer instance
 returns: a keras.layers.Layer instance that is equal to the input + the res block
 '''
-def getResNetBlock(imgDim:int, kernelDim2:tuple|list, stride2:tuple|list, padding:str, epsilon:float, input):
-    logger.info(f'getResNetBlock called. values:\timgDim: {imgDim}\tkernelDim: {kernelDim2}\tstride: {stride2}\tpadding: {padding}\tinput: {input}')
+def getResNetBlock(imgDim:int, kernelDim:tuple|list, stride:tuple|list, padding:str, epsilon:float, input):
+    logger.info(f'getResNetBlock called. values:\timgDim: {imgDim}\tkernelDim: {kernelDim}\tstride: {stride}\tpadding: {padding}\tinput: {input}')
     weightInit = keras.initializers.RandomNormal(stddev = 0.02, seed = getRandomSeed()) #TODO: experiment with this
     
     #resLayer 1
-    layer = Conv2D(filters = imgDim, kernel_size = kernelDim2, strides = stride2, padding = padding, kernel_initializer = weightInit)(input)
+    layer = Conv2D(filters = imgDim, kernel_size = kernelDim, strides = stride, padding = padding, kernel_initializer = weightInit)(input)
     layer = keras.layers.BatchNormalization(axis = -1, epsilon = epsilon)(layer)
     layer = keras.layers.Activation('relu')(layer)
     logger.info(f'resLayer0 created. Value: {layer}\tTarget activation size: (256,64,64)')
 
     #resLayer 2
-    layer = Conv2D(filters = imgDim, kernel_size = kernelDim2, strides = stride2, padding = padding, kernel_initializer = weightInit)(layer)
+    layer = Conv2D(filters = imgDim, kernel_size = kernelDim, strides = stride, padding = padding, kernel_initializer = weightInit)(layer)
     layer = keras.layers.BatchNormalization(axis = -1, epsilon = epsilon)(layer)
     layer = keras.layers.Activation('relu')(layer)
     logger.info(f'resLayer1 created. Value: {layer}\tTarget activation size: (256,64,64)')
@@ -153,7 +157,11 @@ def makeDiscriminator(imgDim:tuple|list, hyperparameterData:tuple|list):
     #compiles model and returns an untrained discriminator CNN
     model = keras.Model(input, layer) #our model
     model.compile(optimizer = 'Adam', loss = 'mse')
-    logging.info(f'Discriminator Summary: {model.summary}')
+    logging.info(f'Discriminator Summary: {str(model.summary)}')
+    with open('savedInfo/discriminatorSummary.json', mode = 'w') as saveModel:
+        saveModel.write(model.to_json())
+    #save model. Figure out why its not working
+    #keras.utils.plot_model(model = model, to_file = 'savedInfo/discriminator.png', show_shapes = True, show_layer_names = True, show_layer_activations = True)
     return model
 
 '''
@@ -161,9 +169,11 @@ generates a random seed as an int32
 returns: an int32 that represents a pseudo-random seed
 '''
 def getRandomSeed():
+    logger.info('getRandomSeed called.')
     random.seed() #initiate the random number generator
     min = 10**(8) #the length of the seed will be 9 digits, min value = 100...0
     max = 9*min + (min - 1) #max value of seed = 999...9
     seed = random.randint(min, max)
-    logging.info(f'seed generated: {seed}')
+    logger.info(f'seed generated: {seed}')
+    return seed
 
