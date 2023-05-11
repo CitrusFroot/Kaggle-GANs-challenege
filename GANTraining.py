@@ -115,12 +115,13 @@ def makeDiscriminator(imgDim:tuple|list, hyperparameterData:tuple|list):
     logger.info(f'makeDiscriminator called.\timgDim: {imgDim}\thyperparameterData: {hyperparameterData}')
 
     filters    = hyperparameterData[0]
-    kernelDim1 = hyperparameterData[1]
-    kernelDim2 = hyperparameterData[2]
+    kernelDim1 = hyperparameterData[1] #kernel size for first hidden layer
+    kernelDim2 = hyperparameterData[2] #kernel size for all other layers
     padding    = hyperparameterData[4]
-    stride1    = hyperparameterData[5]
-    stride3    = hyperparameterData[7]
-    alpha      = hyperparameterData[8]
+    stride1    = hyperparameterData[5] #stride for final 2 layers
+    stride3    = hyperparameterData[7] #stride for all other layers
+    alpha      = hyperparameterData[8] #hyperparameter that decreases gradient in LeakyReLU if x < 0
+    epsilon    = hyperparameterData[9] #learning rate
 
     weightInit = keras.initializers.RandomNormal(stddev = 0.02, seed = getRandomSeed()) #TODO: experiment with this
 
@@ -128,38 +129,32 @@ def makeDiscriminator(imgDim:tuple|list, hyperparameterData:tuple|list):
 
     #first hidden conv layer
     layer = Conv2D(filters = filters, kernel_size = kernelDim1, strides = stride3, padding = padding, kernel_initializer = weightInit)(input)
+    layer = keras.layers.BatchNormalization(axis = -1, epsilon = epsilon)(layer)
     layer = keras.layers.LeakyReLU(alpha = alpha)(layer) #activation layer TODO experiment with other activation functions
 
-    #filters = filters*2, as this seems to be the recommended flow of CycleGAN. Experiment/Research required
+    #second hidden conv layer
     layer = Conv2D(filters = filters*2, kernel_size = kernelDim2, strides = stride3, padding = padding, kernel_initializer = weightInit)(layer)
-    #Try a normalization layer here. Recommended: BatchNormalization, InstanceNormalization
+    layer = keras.layers.BatchNormalization(axis = -1, epsilon = epsilon)(layer)
     layer = keras.layers.LeakyReLU(alpha = alpha)(layer)
 
-    #filters = filters*4, as this seems to be the recommended flow of CycleGAN. Experiment/Research required
+   #third hidden conv layer
     layer = Conv2D(filters = filters*4, kernel_size = kernelDim2, strides = stride3, padding = padding, kernel_initializer = weightInit)(layer)
-    #Try a normalization layer here. Recommended: BatchNormalization, InstanceNormalization
+    layer = keras.layers.BatchNormalization(axis = -1, epsilon = epsilon)(layer)
     layer = keras.layers.LeakyReLU(alpha = alpha)(layer)
 
     #filters = filters*8, as this seems to be the recommended flow of CycleGAN. Experiment/Research required
     layer = Conv2D(filters = filters*8, kernel_size = kernelDim2, strides = stride1, padding = padding, kernel_initializer = weightInit)(layer)
-    #Try a normalization layer here. Recommended: BatchNormalization, InstanceNormalization
+    layer = keras.layers.BatchNormalization(axis = -1, epsilon = epsilon)(layer)
     layer = keras.layers.LeakyReLU(alpha = alpha)(layer)
 
     #Output layer
     layer = Conv2D(filters = 1, kernel_size = kernelDim2, strides = stride1, padding = padding, kernel_initializer = weightInit)(layer)
 
+    #compiles model and returns an untrained discriminator CNN
     model = keras.Model(input, layer) #our model
-    #TODO: experiment with different optimizers
-
     model.compile(optimizer = 'Adam', loss = 'mse')
     logging.info(f'Discriminator Summary: {model.summary}')
     return model
-
-def doCycle(domainA, generatorA, domainB, generatorB):
-    pass
-
-def deepConvGAN(x, xtarget, poolSize): #for experience
-    pass
 
 '''
 generates a random seed as an int32

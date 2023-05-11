@@ -1,0 +1,19 @@
+2023-05-10 20:14:42,732 | INFO: makeGenerator called... imgDim: (256, 256, 3)
+2023-05-10 20:14:42,735 | INFO: inputLayer created. Value: KerasTensor(type_spec=TensorSpec(shape=(None, 256, 256, 3), dtype=tf.float32, name='input_2'), name='input_2', description="created by layer 'input_2'")
+Target activation size: (3,256,256)
+2023-05-10 20:14:42,785 | INFO: hConvLayer0 created. Value: KerasTensor(type_spec=TensorSpec(shape=(None, 256, 256, 64), dtype=tf.float32, name=None), name='leaky_re_lu_4/LeakyRelu:0', description="created by layer 'leaky_re_lu_4'")
+Target activation size: (64,256,256)
+2023-05-10 20:14:42,858 | INFO: hConvLayer1 created. Value: KerasTensor(type_spec=TensorSpec(shape=(None, 128, 128, 128), dtype=tf.float32, name=None), name='leaky_re_lu_5/LeakyRelu:0', description="created by layer 'leaky_re_lu_5'")
+Target activation size: (128,128,128)
+2023-05-10 20:14:42,925 | INFO: hConvLayer2 created. Value: KerasTensor(type_spec=TensorSpec(shape=(None, 64, 64, 256), dtype=tf.float32, name=None), name='leaky_re_lu_6/LeakyRelu:0', description="created by layer 'leaky_re_lu_6'")
+Target activation size: (256,64,64)
+2023-05-10 20:14:42,926 | INFO: getResNetBlock called. values:
+imgDim: 256
+kernelDim: (3, 3)
+stride: (2, 2)
+ padding: same
+input: KerasTensor(type_spec=TensorSpec(shape=(None, 64, 64, 256), dtype=tf.float32, name=None), name='leaky_re_lu_6/LeakyRelu:0', description="created by layer 'leaky_re_lu_6'")
+2023-05-10 20:14:42,999 | INFO: resLayer0 created. Value: KerasTensor(type_spec=TensorSpec(shape=(None, 32, 32, 256), dtype=tf.float32, name=None), name='activation/Relu:0', description="created by layer 'activation'")
+Target activation size: (256,64,64)
+2023-05-10 20:14:43,072 | INFO: resLayer1 created. Value: KerasTensor(type_spec=TensorSpec(shape=(None, 16, 16, 256), dtype=tf.float32, name=None), name='activation_1/Relu:0', description="created by layer 'activation_1'")
+Target activation size: (256,64,64)

@@ -56,7 +56,7 @@ cover/
 *.pot
 
 # Django stuff:
-*.log
+#*.log <----- we want these to track how the code changes. !!!MAKE SURE TO CLEAR SOME OLD ONES!!!
 local_settings.py
 db.sqlite3
 db.sqlite3-journal
