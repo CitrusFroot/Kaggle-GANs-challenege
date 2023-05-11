@@ -1,0 +1,34 @@
+What Is the CycleGAN?
+
+The CycleGAN model was described by Jun-Yan Zhu, et al. in their 2017 paper titled “Unpaired Image-to-Image Translation using Cycle-Consistent Adversarial Networks.”
+
+The benefit of the CycleGAN model is that it can be trained without paired examples. That is, it does not require examples of photographs before and after the translation in order to train the model, e.g. photos of the same city landscape during the day and at night. Instead, the model is able to use a collection of photographs from each domain and extract and harness the underlying style of images in the collection in order to perform the translation.
+
+The model architecture is comprised of two generator models: one generator (Generator-A) for generating images for the first domain (Domain-A) and the second generator (Generator-B) for generating images for the second domain (Domain-B).
+
+    Generator-A -> Domain-A
+    Generator-B -> Domain-B
+
+The generator models perform image translation, meaning that the image generation process is conditional on an input image, specifically an image from the other domain. Generator-A takes an image from Domain-B as input and Generator-B takes an image from Domain-A as input.
+
+    Domain-B -> Generator-A -> Domain-A
+    Domain-A -> Generator-B -> Domain-B
+
+Each generator has a corresponding discriminator model. The first discriminator model (Discriminator-A) takes real images from Domain-A and generated images from Generator-A and predicts whether they are real or fake. The second discriminator model (Discriminator-B) takes real images from Domain-B and generated images from Generator-B and predicts whether they are real or fake.
+
+    Domain-A -> Discriminator-A -> [Real/Fake]
+    Domain-B -> Generator-A -> Discriminator-A -> [Real/Fake]
+    Domain-B -> Discriminator-B -> [Real/Fake]
+    Domain-A -> Generator-B -> Discriminator-B -> [Real/Fake]
+
+The discriminator and generator models are trained in an adversarial zero-sum process, like normal GAN models. The generators learn to better fool the discriminators and the discriminator learn to better detect fake images. Together, the models find an equilibrium during the training process.
+
+Additionally, the generator models are regularized to not just create new images in the target domain, but instead translate more reconstructed versions of the input images from the source domain. This is achieved by using generated images as input to the corresponding generator model and comparing the output image to the original images. Passing an image through both generators is called a cycle. Together, each pair of generator models are trained to better reproduce the original source image, referred to as cycle consistency.
+
+    Domain-B -> Generator-A -> Domain-A -> Generator-B -> Domain-B
+    Domain-A -> Generator-B -> Domain-B -> Generator-A -> Domain-A
+
+There is one further element to the architecture, referred to as the identity mapping. This is where a generator is provided with images as input from the target domain and is expected to generate the same image without change. This addition to the architecture is optional, although results in a better matching of the color profile of the input image.
+
+    Domain-A -> Generator-A -> Domain-A
+    Domain-B -> Generator-B -> Domain-B
