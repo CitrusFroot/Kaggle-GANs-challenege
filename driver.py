@@ -101,5 +101,5 @@ if __name__ == "__main__":
 '''
 ============== CREDITS =============
 Starting architecture: https://towardsdatascience.com/overview-of-cyclegan-architecture-and-training-afee31612a2f
-
+get random seed: RMPR, stack overflow. https://stackoverflow.com/questions/58468532/generate-random-seed-in-python
 '''
