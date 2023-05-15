@@ -66,6 +66,7 @@ if __name__ == "__main__":
     BATCH_SIZE = 64
     NUM_BATCHES = np.ceil((300/BATCH_SIZE))
     EPOCHS = 100
+    EPOCH_STEPS = 30
     VALIDATION_SPLIT = 0.3
 
     FILTERS       = 64
