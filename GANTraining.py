@@ -41,38 +41,53 @@ def make_generator(imgDim:tuple|list, hyperparameters:tuple|list, num_res_blocks
         logger.warn(f'input layer is not of the correct target size. current size is {imgDim}, should be (256, 256, 3)')
 
     #first hidden convolutional layer. Activation size should be (256,256,64)
-    layer = Conv2D(filters = filters, kernel_size = kernel_dim1, strides = stride1, padding = padding, kernel_initializer = weight_init)(input)
-    layer = keras.layers.BatchNormalization(axis = -1, epsilon = epsilon)(layer)
-    layer = keras.layers.LeakyReLU(alpha = alpha)(layer)
+    layer = make_conv2D(filters=filters, 
+                        kernel_size=kernel_dim1, 
+                        strides=stride1, 
+                        kernel_initializer=weight_init, 
+                        prev_layer=input)
+    layer = norm_and_activation(epsilon=epsilon, alpha=alpha, prev_layer=layer)
     logger.debug(f'hConvLayer0 created. Value: {layer}\tTarget activation size: (256, 256, 64)')
 
     #second hidden conv layer. Activation size should be (128,128,128)
-    layer = Conv2D(filters = filters*2, kernel_size = kernel_dim2, strides = stride2, padding = padding, kernel_initializer = weight_init)(layer)
-    layer = keras.layers.BatchNormalization(axis = -1, epsilon = epsilon)(layer)
-    layer = keras.layers.LeakyReLU(alpha = alpha)(layer)
+    layer = make_conv2D(filters=filters*2, 
+                        kernel_size=kernel_dim2, 
+                        strides=stride2, 
+                        kernel_initializer=weight_init, 
+                        prev_layer=layer)
+    layer = norm_and_activation(epsilon=epsilon, alpha=alpha, prev_layer=layer)
     logger.debug(f'hConvLayer1 created. Value: {layer}\tTarget activation size: (128,128,128)')
 
     #third hidden conv layer. Activation size should be (64,64,256)
-    layer = Conv2D(filters = filters*4, kernel_size = kernel_dim2, strides = stride2, padding = padding, kernel_initializer = weight_init)(layer)
-    layer = keras.layers.BatchNormalization(axis = -1, epsilon = epsilon)(layer)
-    layer = keras.layers.LeakyReLU(alpha = alpha)(layer)
+    layer = make_conv2D(filters=filters*4, 
+                        kernel_size=kernel_dim2, 
+                        strides=stride2, 
+                        kernel_initializer=weight_init, 
+                        prev_layer=layer)
+    layer = norm_and_activation(epsilon=epsilon, alpha=alpha, prev_layer=layer)
     logger.debug(f'hConvLayer2 created. Value: {layer}\tTarget activation size: (64, 64, 256)')
 
     #adds x amount of residual layers. 9 for 256x256 TODO: verify math and find evidence to back up. !!!STRIDE MUST BE (1,1) given everything else is standard
     for _ in range(num_res_blocks):
         layer = get_resnet_block(imgDim[0], kernel_dim2, stride1, padding, epsilon, layer) #when finished, layer's activation size should be (64,64,256)
-    
+    logger.debug(f'resnet block completed. Layer: {layer}\tTarget activation size: (64, 64, 256)')
+
     #we transpose to upscale the image. Every conv2D layer decreases the dimension of the image. These two layers restore the original dimensions
     layer = keras.layers.Conv2DTranspose(filters = filters*2, kernel_size = kernel_dim2, strides = stride2, padding = padding, output_padding = (1,1), kernel_initializer = weight_init)(layer)
-    layer = keras.layers.BatchNormalization(axis = -1, epsilon = epsilon)(layer)
-    layer = keras.layers.LeakyReLU(alpha = alpha)(layer)
+    layer = norm_and_activation(epsilon=epsilon, alpha=alpha, prev_layer=layer)
+    logger.debug(f'first transposed Conv2D layer generated. Layer: {layer}') #TODO get target size
 
     layer = keras.layers.Conv2DTranspose(filters = filters, kernel_size = kernel_dim2, strides = stride2, padding = padding, output_padding = (1,1), kernel_initializer = weight_init)(layer)
-    layer = keras.layers.BatchNormalization(axis = -1, epsilon = epsilon)(layer)
-    layer = keras.layers.LeakyReLU(alpha = alpha)(layer)
+    layer = norm_and_activation(epsilon=epsilon, alpha=alpha, prev_layer=layer)
+    logger.debug(f'final transposed Conv2D layer generated. Layer: {layer}') #TODO get target size
 
     #final output layer
-    layer = Conv2D(filters = imgDim[2], kernel_size = kernel_dim2, strides = stride1, padding = padding, kernel_initializer = weight_init)(layer)
+    layer = make_conv2D(filters=imgDim[2],
+                        kernel_size=kernel_dim2,
+                        strides=stride1,
+                        kernel_initializer=weight_init,
+                        prev_layer=layer)
+    logger.debug(f'final layer of generator made. layer: {layer}') #TODO get target activation size
 
     #compiles the untrained model and returns it to driver.py
     model = keras.Model(input, layer)
@@ -134,9 +149,7 @@ def make_discriminator(imgDim:tuple|list, hyperparameters:tuple|list, i:str):
     input = keras.Input(shape = imgDim) #sets the input type
 
     #first hidden conv layer
-    layer = Conv2D(filters = filters, kernel_size = kernelDim1, strides = stride3, padding = padding, kernel_initializer = weightInit)(input)
-    layer = keras.layers.BatchNormalization(axis = -1, epsilon = epsilon)(layer)
-    layer = keras.layers.LeakyReLU(alpha = alpha)(layer) #activation layer TODO experiment with other activation functions
+    
 
     #second hidden conv layer
     layer = Conv2D(filters = filters*2, kernel_size = kernelDim2, strides = stride3, padding = padding, kernel_initializer = weightInit)(layer)
@@ -183,5 +196,20 @@ def get_random_seed():
 loads in saved model jsons and trains them for a single iteration
 saves the trained models for the next step
 '''
+
+def make_conv2D(filters, kernel_size, strides, kernel_initializer prev_layer):
+    layer = Conv2D(filters = filters, kernel_size = kernel_size, strides = strides, padding = 'same', kernel_initializer = kernel_initializer)(prev_layer)
+    return layer
+
+def norm_and_activation(epsilon, alpha, prev_layer, is_leaky=True):
+    layer = keras.layers.BatchNormalization(axis = -1, epsilon = epsilon)(prev_layer)
+    
+    if is_leaky:
+        layer = keras.layers.LeakyReLU(alpha = alpha)(layer) #activation layer TODO experiment with other activation functions
+    else:
+        layer = keras.layers.Activation('relu')(layer)
+
+    return layer
+
 def do_training_step():
     pass
