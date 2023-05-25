@@ -135,40 +135,59 @@ hyperparameterData: a tuple/list that represents an amount of hyperparameters fo
 def make_discriminator(imgDim:tuple|list, hyperparameters:tuple|list, i:str):
     logger.debug(f'makeDiscriminator called.\timgDim: {imgDim}\thyperparameterData: {hyperparameters}')
 
-    filters    = hyperparameters[0]
-    kernelDim1 = hyperparameters[1] #kernel size for first hidden layer
-    kernelDim2 = hyperparameters[2] #kernel size for all other layers
-    padding    = hyperparameters[4]
-    stride1    = hyperparameters[5] #stride for final 2 layers
-    stride3    = hyperparameters[7] #stride for all other layers
-    alpha      = hyperparameters[8] #hyperparameter that decreases gradient in LeakyReLU if x < 0
-    epsilon    = hyperparameters[9] #learning rate
+    filters     = hyperparameters[0]
+    kernel_dim1 = hyperparameters[1] #kernel size for first hidden layer
+    kernel_dim2 = hyperparameters[2] #kernel size for all other layers
+    padding     = hyperparameters[4]
+    stride1     = hyperparameters[5] #stride for final 2 layers
+    stride3     = hyperparameters[7] #stride for all other layers
+    alpha       = hyperparameters[8] #hyperparameter that decreases gradient in LeakyReLU if x < 0
+    epsilon     = hyperparameters[9] #learning rate
 
-    weightInit = keras.initializers.RandomNormal(stddev = 0.02, seed = get_random_seed()) #TODO: experiment with this
+    weight_init = keras.initializers.RandomNormal(stddev = 0.02, seed = get_random_seed()) #TODO: experiment with this
 
     input = keras.Input(shape = imgDim) #sets the input type
 
-    #first hidden conv layer
-    
+    #first layer (input)
+    layer = make_conv2D(filters=filters, 
+                        kernel_size=kernel_dim1, 
+                        strides=stride1, 
+                        kernel_initializer=weight_init, 
+                        prev_layer=input)
+    layer = norm_and_activation(epsilon=epsilon, alpha=alpha, prev_layer=layer)
 
     #second hidden conv layer
-    layer = Conv2D(filters = filters*2, kernel_size = kernelDim2, strides = stride3, padding = padding, kernel_initializer = weightInit)(layer)
-    layer = keras.layers.BatchNormalization(axis = -1, epsilon = epsilon)(layer)
-    layer = keras.layers.LeakyReLU(alpha = alpha)(layer)
-
+    layer = make_conv2D(filters=filters*2,
+                        kernel_size=kernel_dim2,
+                        strides=stride3,
+                        kernel_initializer=weight_init,
+                        prev_layer=layer)
+    layer = norm_and_activation(epsilon=epsilon,alpha=alpha,prev_layer=layer)
+    
    #third hidden conv layer
-    layer = Conv2D(filters = filters*4, kernel_size = kernelDim2, strides = stride3, padding = padding, kernel_initializer = weightInit)(layer)
-    layer = keras.layers.BatchNormalization(axis = -1, epsilon = epsilon)(layer)
-    layer = keras.layers.LeakyReLU(alpha = alpha)(layer)
+    layer = make_conv2D(filters=filters*4,
+                        kernel_size=kernel_dim2,
+                        strides=stride3,
+                        kernel_initializer=weight_init,
+                        prev_layer=layer)
+    layer = norm_and_activation(epsilon=epsilon,alpha=alpha,prev_layer=layer)
 
     #filters = filters*8, as this seems to be the recommended flow of CycleGAN. Experiment/Research required
-    layer = Conv2D(filters = filters*8, kernel_size = kernelDim2, strides = stride1, padding = padding, kernel_initializer = weightInit)(layer)
-    layer = keras.layers.BatchNormalization(axis = -1, epsilon = epsilon)(layer)
-    layer = keras.layers.LeakyReLU(alpha = alpha)(layer)
-
+    #fourth hidden conv layer
+    layer = make_conv2D(filters=filters*8,
+                        kernel_size=kernel_dim2,
+                        strides=stride1,
+                        kernel_initializer=weight_init,
+                        prev_layer=layer)
+    layer = norm_and_activation(epsilon=epsilon,alpha=alpha,prev_layer=layer)
+   
     #Output layer
-    layer = Conv2D(filters = 1, kernel_size = kernelDim2, strides = stride1, padding = padding, kernel_initializer = weightInit)(layer)
-
+    layer = make_conv2D(filters=1,
+                        kernel_size=kernel_dim2,
+                        strides=stride1,
+                        kernel_initializer=weight_init,
+                        prev_layer=layer)
+    
     #compiles model and returns an untrained discriminator CNN
     model = keras.Model(input, layer) #our model
     model.compile(optimizer = 'Adam', loss = 'mse')
@@ -197,7 +216,7 @@ loads in saved model jsons and trains them for a single iteration
 saves the trained models for the next step
 '''
 
-def make_conv2D(filters, kernel_size, strides, kernel_initializer prev_layer):
+def make_conv2D(filters, kernel_size, strides, kernel_initializer, prev_layer):
     layer = Conv2D(filters = filters, kernel_size = kernel_size, strides = strides, padding = 'same', kernel_initializer = kernel_initializer)(prev_layer)
     return layer
 
