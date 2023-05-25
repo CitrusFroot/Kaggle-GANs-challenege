@@ -27,7 +27,6 @@ def make_generator(imgDim:tuple|list, hyperparameters:tuple|list, num_res_blocks
     filters    = hyperparameters[0]
     kernel_dim1 = hyperparameters[1] #first kernel
     kernel_dim2 = hyperparameters[2] #kernel used for all other layers
-    padding    = hyperparameters[4]
     stride1    = hyperparameters[5] #stride for input and output layers
     stride2    = hyperparameters[6] #stride for all other layers
     alpha      = hyperparameters[8] #hyperparameter that decreases gradient in LeakyReLU if x < 0
@@ -109,20 +108,26 @@ epsilon: a float that represents the learning rate of the model
 input:   a keras.layers.Layer instance
 returns: a keras.layers.Layer instance that is equal to the input + the res block
 '''
-def get_resnet_block(imgDim:int, kernelDim:tuple|list, stride:tuple|list, padding:str, epsilon:float, input):
-    logger.debug(f'getResNetBlock called. values:\timgDim: {imgDim}\tkernelDim: {kernelDim}\tstride: {stride}\tpadding: {padding}\tinput: {input}')
-    weightInit = keras.initializers.RandomNormal(stddev = 0.02, seed = get_random_seed()) #TODO: experiment with this
+def get_resnet_block(img_dim:int, kernel_dim:tuple|list, stride:tuple|list, epsilon:float, input):
+    logger.debug(f'getResNetBlock called. values:\timgDim: {img_dim}\tkernelDim: {kernel_dim}\tstride: {stride}\tinput: {input}')
+    weight_init = keras.initializers.RandomNormal(stddev = 0.02, seed = get_random_seed()) #TODO: experiment with this
     
     #resLayer 1
-    layer = Conv2D(filters = imgDim, kernel_size = kernelDim, strides = stride, padding = padding, kernel_initializer = weightInit)(input)
-    layer = keras.layers.BatchNormalization(axis = -1, epsilon = epsilon)(layer)
-    layer = keras.layers.Activation('relu')(layer)
+    layer = make_conv2D(filters=img_dim,
+                        kernel_size=kernel_dim,
+                        strides=stride,
+                        kernel_initializer=weight_init,
+                        prev_layer=input)
+    layer = norm_and_activation(epsilon=epsilon,alpha=None,prev_layer=layer,is_leaky=False)
     logger.debug(f'resLayer0 created. Value: {layer}\tTarget activation size: (256,64,64)')
 
     #resLayer 2
-    layer = Conv2D(filters = imgDim, kernel_size = kernelDim, strides = stride, padding = padding, kernel_initializer = weightInit)(layer)
-    layer = keras.layers.BatchNormalization(axis = -1, epsilon = epsilon)(layer)
-    layer = keras.layers.Activation('relu')(layer)
+    layer = make_conv2D(filters=img_dim,
+                        kernel_size=kernel_dim,
+                        strides=stride,
+                        kernel_initializer=weight_init,
+                        prev_layer=layer)
+    layer = norm_and_activation(epsilon=epsilon,alpha=None,prev_layer=layer,is_leaky=False)
     logger.debug(f'resLayer1 created. Value: {layer}\tTarget activation size: (256,64,64)')
 
     return keras.layers.Add()((input, layer))
@@ -138,7 +143,6 @@ def make_discriminator(imgDim:tuple|list, hyperparameters:tuple|list, i:str):
     filters     = hyperparameters[0]
     kernel_dim1 = hyperparameters[1] #kernel size for first hidden layer
     kernel_dim2 = hyperparameters[2] #kernel size for all other layers
-    padding     = hyperparameters[4]
     stride1     = hyperparameters[5] #stride for final 2 layers
     stride3     = hyperparameters[7] #stride for all other layers
     alpha       = hyperparameters[8] #hyperparameter that decreases gradient in LeakyReLU if x < 0
