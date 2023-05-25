@@ -1,0 +1,112 @@
+2023-05-15 12:58:04,590 | INFO: makeDiscriminator called.	imgDim: (256, 256, 3)	hyperparameterData: [64, (7, 7), (3, 3), (4, 4), 'same', (1, 1), (2, 2), (4, 4), 0.2, 0.001]
+2023-05-15 12:58:04,590 | INFO: getRandomSeed called.
+2023-05-15 12:58:04,591 | INFO: seed generated: 932089877
+2023-05-15 12:58:04,841 | INFO: makeGenerator called.	imgDim: (256, 256, 3)
+2023-05-15 12:58:04,841 | INFO: getRandomSeed called.
+2023-05-15 12:58:04,842 | INFO: seed generated: 585209197
+2023-05-15 12:58:04,890 | DEBUG: hConvLayer0 created. Value: KerasTensor(type_spec=TensorSpec(shape=(None, 256, 256, 64), dtype=tf.float32, name=None), name='leaky_re_lu_4/LeakyRelu:0', description="created by layer 'leaky_re_lu_4'")	Target activation size: (256, 256, 64)
+2023-05-15 12:58:04,929 | DEBUG: hConvLayer1 created. Value: KerasTensor(type_spec=TensorSpec(shape=(None, 128, 128, 128), dtype=tf.float32, name=None), name='leaky_re_lu_5/LeakyRelu:0', description="created by layer 'leaky_re_lu_5'")	Target activation size: (128,128,128)
+2023-05-15 12:58:04,982 | DEBUG: hConvLayer2 created. Value: KerasTensor(type_spec=TensorSpec(shape=(None, 64, 64, 256), dtype=tf.float32, name=None), name='leaky_re_lu_6/LeakyRelu:0', description="created by layer 'leaky_re_lu_6'")	Target activation size: (64, 64, 256)
+2023-05-15 12:58:04,983 | INFO: getResNetBlock called. values:	imgDim: 256	kernelDim: (3, 3)	stride: (1, 1)	padding: same	input: KerasTensor(type_spec=TensorSpec(shape=(None, 64, 64, 256), dtype=tf.float32, name=None), name='leaky_re_lu_6/LeakyRelu:0', description="created by layer 'leaky_re_lu_6'")
+2023-05-15 12:58:04,986 | INFO: getRandomSeed called.
+2023-05-15 12:58:04,987 | INFO: seed generated: 311870226
+2023-05-15 12:58:05,061 | INFO: resLayer0 created. Value: KerasTensor(type_spec=TensorSpec(shape=(None, 64, 64, 256), dtype=tf.float32, name=None), name='activation/Relu:0', description="created by layer 'activation'")	Target activation size: (256,64,64)
+2023-05-15 12:58:05,135 | INFO: resLayer1 created. Value: KerasTensor(type_spec=TensorSpec(shape=(None, 64, 64, 256), dtype=tf.float32, name=None), name='activation_1/Relu:0', description="created by layer 'activation_1'")	Target activation size: (256,64,64)
+2023-05-15 12:58:05,143 | INFO: getResNetBlock called. values:	imgDim: 256	kernelDim: (3, 3)	stride: (1, 1)	padding: same	input: KerasTensor(type_spec=TensorSpec(shape=(None, 64, 64, 256), dtype=tf.float32, name=None), name='add/add:0', description="created by layer 'add'")
+2023-05-15 12:58:05,144 | INFO: getRandomSeed called.
+2023-05-15 12:58:05,145 | INFO: seed generated: 303506770
+2023-05-15 12:58:05,222 | INFO: resLayer0 created. Value: KerasTensor(type_spec=TensorSpec(shape=(None, 64, 64, 256), dtype=tf.float32, name=None), name='activation_2/Relu:0', description="created by layer 'activation_2'")	Target activation size: (256,64,64)
+2023-05-15 12:58:05,291 | INFO: resLayer1 created. Value: KerasTensor(type_spec=TensorSpec(shape=(None, 64, 64, 256), dtype=tf.float32, name=None), name='activation_3/Relu:0', description="created by layer 'activation_3'")	Target activation size: (256,64,64)
+2023-05-15 12:58:05,298 | INFO: getResNetBlock called. values:	imgDim: 256	kernelDim: (3, 3)	stride: (1, 1)	padding: same	input: KerasTensor(type_spec=TensorSpec(shape=(None, 64, 64, 256), dtype=tf.float32, name=None), name='add_1/add:0', description="created by layer 'add_1'")
+2023-05-15 12:58:05,301 | INFO: getRandomSeed called.
+2023-05-15 12:58:05,302 | INFO: seed generated: 905484910
+2023-05-15 12:58:05,358 | INFO: resLayer0 created. Value: KerasTensor(type_spec=TensorSpec(shape=(None, 64, 64, 256), dtype=tf.float32, name=None), name='activation_4/Relu:0', description="created by layer 'activation_4'")	Target activation size: (256,64,64)
+2023-05-15 12:58:05,412 | INFO: resLayer1 created. Value: KerasTensor(type_spec=TensorSpec(shape=(None, 64, 64, 256), dtype=tf.float32, name=None), name='activation_5/Relu:0', description="created by layer 'activation_5'")	Target activation size: (256,64,64)
+2023-05-15 12:58:05,421 | INFO: getResNetBlock called. values:	imgDim: 256	kernelDim: (3, 3)	stride: (1, 1)	padding: same	input: KerasTensor(type_spec=TensorSpec(shape=(None, 64, 64, 256), dtype=tf.float32, name=None), name='add_2/add:0', description="created by layer 'add_2'")
+2023-05-15 12:58:05,422 | INFO: getRandomSeed called.
+2023-05-15 12:58:05,423 | INFO: seed generated: 804234663
+2023-05-15 12:58:05,478 | INFO: resLayer0 created. Value: KerasTensor(type_spec=TensorSpec(shape=(None, 64, 64, 256), dtype=tf.float32, name=None), name='activation_6/Relu:0', description="created by layer 'activation_6'")	Target activation size: (256,64,64)
+2023-05-15 12:58:05,537 | INFO: resLayer1 created. Value: KerasTensor(type_spec=TensorSpec(shape=(None, 64, 64, 256), dtype=tf.float32, name=None), name='activation_7/Relu:0', description="created by layer 'activation_7'")	Target activation size: (256,64,64)
+2023-05-15 12:58:05,542 | INFO: getResNetBlock called. values:	imgDim: 256	kernelDim: (3, 3)	stride: (1, 1)	padding: same	input: KerasTensor(type_spec=TensorSpec(shape=(None, 64, 64, 256), dtype=tf.float32, name=None), name='add_3/add:0', description="created by layer 'add_3'")
+2023-05-15 12:58:05,543 | INFO: getRandomSeed called.
+2023-05-15 12:58:05,544 | INFO: seed generated: 394702853
+2023-05-15 12:58:05,604 | INFO: resLayer0 created. Value: KerasTensor(type_spec=TensorSpec(shape=(None, 64, 64, 256), dtype=tf.float32, name=None), name='activation_8/Relu:0', description="created by layer 'activation_8'")	Target activation size: (256,64,64)
+2023-05-15 12:58:05,659 | INFO: resLayer1 created. Value: KerasTensor(type_spec=TensorSpec(shape=(None, 64, 64, 256), dtype=tf.float32, name=None), name='activation_9/Relu:0', description="created by layer 'activation_9'")	Target activation size: (256,64,64)
+2023-05-15 12:58:05,668 | INFO: getResNetBlock called. values:	imgDim: 256	kernelDim: (3, 3)	stride: (1, 1)	padding: same	input: KerasTensor(type_spec=TensorSpec(shape=(None, 64, 64, 256), dtype=tf.float32, name=None), name='add_4/add:0', description="created by layer 'add_4'")
+2023-05-15 12:58:05,669 | INFO: getRandomSeed called.
+2023-05-15 12:58:05,670 | INFO: seed generated: 758929630
+2023-05-15 12:58:05,745 | INFO: resLayer0 created. Value: KerasTensor(type_spec=TensorSpec(shape=(None, 64, 64, 256), dtype=tf.float32, name=None), name='activation_10/Relu:0', description="created by layer 'activation_10'")	Target activation size: (256,64,64)
+2023-05-15 12:58:05,802 | INFO: resLayer1 created. Value: KerasTensor(type_spec=TensorSpec(shape=(None, 64, 64, 256), dtype=tf.float32, name=None), name='activation_11/Relu:0', description="created by layer 'activation_11'")	Target activation size: (256,64,64)
+2023-05-15 12:58:05,808 | INFO: getResNetBlock called. values:	imgDim: 256	kernelDim: (3, 3)	stride: (1, 1)	padding: same	input: KerasTensor(type_spec=TensorSpec(shape=(None, 64, 64, 256), dtype=tf.float32, name=None), name='add_5/add:0', description="created by layer 'add_5'")
+2023-05-15 12:58:05,809 | INFO: getRandomSeed called.
+2023-05-15 12:58:05,809 | INFO: seed generated: 594824781
+2023-05-15 12:58:05,870 | INFO: resLayer0 created. Value: KerasTensor(type_spec=TensorSpec(shape=(None, 64, 64, 256), dtype=tf.float32, name=None), name='activation_12/Relu:0', description="created by layer 'activation_12'")	Target activation size: (256,64,64)
+2023-05-15 12:58:05,928 | INFO: resLayer1 created. Value: KerasTensor(type_spec=TensorSpec(shape=(None, 64, 64, 256), dtype=tf.float32, name=None), name='activation_13/Relu:0', description="created by layer 'activation_13'")	Target activation size: (256,64,64)
+2023-05-15 12:58:05,936 | INFO: getResNetBlock called. values:	imgDim: 256	kernelDim: (3, 3)	stride: (1, 1)	padding: same	input: KerasTensor(type_spec=TensorSpec(shape=(None, 64, 64, 256), dtype=tf.float32, name=None), name='add_6/add:0', description="created by layer 'add_6'")
+2023-05-15 12:58:05,937 | INFO: getRandomSeed called.
+2023-05-15 12:58:05,938 | INFO: seed generated: 890047882
+2023-05-15 12:58:06,114 | INFO: resLayer0 created. Value: KerasTensor(type_spec=TensorSpec(shape=(None, 64, 64, 256), dtype=tf.float32, name=None), name='activation_14/Relu:0', description="created by layer 'activation_14'")	Target activation size: (256,64,64)
+2023-05-15 12:58:06,174 | INFO: resLayer1 created. Value: KerasTensor(type_spec=TensorSpec(shape=(None, 64, 64, 256), dtype=tf.float32, name=None), name='activation_15/Relu:0', description="created by layer 'activation_15'")	Target activation size: (256,64,64)
+2023-05-15 12:58:06,183 | INFO: getResNetBlock called. values:	imgDim: 256	kernelDim: (3, 3)	stride: (1, 1)	padding: same	input: KerasTensor(type_spec=TensorSpec(shape=(None, 64, 64, 256), dtype=tf.float32, name=None), name='add_7/add:0', description="created by layer 'add_7'")
+2023-05-15 12:58:06,184 | INFO: getRandomSeed called.
+2023-05-15 12:58:06,185 | INFO: seed generated: 617856566
+2023-05-15 12:58:06,244 | INFO: resLayer0 created. Value: KerasTensor(type_spec=TensorSpec(shape=(None, 64, 64, 256), dtype=tf.float32, name=None), name='activation_16/Relu:0', description="created by layer 'activation_16'")	Target activation size: (256,64,64)
+2023-05-15 12:58:06,307 | INFO: resLayer1 created. Value: KerasTensor(type_spec=TensorSpec(shape=(None, 64, 64, 256), dtype=tf.float32, name=None), name='activation_17/Relu:0', description="created by layer 'activation_17'")	Target activation size: (256,64,64)
+2023-05-15 12:58:06,447 | INFO: Generator Summary: <bound method Model.summary of <keras.engine.functional.Functional object at 0x0000024010E8DE40>>
+2023-05-15 12:58:06,483 | DEBUG: Saved model to json file
+2023-05-15 12:58:06,485 | INFO: makeDiscriminator called.	imgDim: (256, 256, 3)	hyperparameterData: [64, (7, 7), (3, 3), (4, 4), 'same', (1, 1), (2, 2), (4, 4), 0.2, 0.001]
+2023-05-15 12:58:06,486 | INFO: getRandomSeed called.
+2023-05-15 12:58:06,487 | INFO: seed generated: 470124263
+2023-05-15 12:58:06,679 | INFO: makeGenerator called.	imgDim: (256, 256, 3)
+2023-05-15 12:58:06,679 | INFO: getRandomSeed called.
+2023-05-15 12:58:06,680 | INFO: seed generated: 968034021
+2023-05-15 12:58:06,726 | DEBUG: hConvLayer0 created. Value: KerasTensor(type_spec=TensorSpec(shape=(None, 256, 256, 64), dtype=tf.float32, name=None), name='leaky_re_lu_13/LeakyRelu:0', description="created by layer 'leaky_re_lu_13'")	Target activation size: (256, 256, 64)
+2023-05-15 12:58:06,767 | DEBUG: hConvLayer1 created. Value: KerasTensor(type_spec=TensorSpec(shape=(None, 128, 128, 128), dtype=tf.float32, name=None), name='leaky_re_lu_14/LeakyRelu:0', description="created by layer 'leaky_re_lu_14'")	Target activation size: (128,128,128)
+2023-05-15 12:58:06,813 | DEBUG: hConvLayer2 created. Value: KerasTensor(type_spec=TensorSpec(shape=(None, 64, 64, 256), dtype=tf.float32, name=None), name='leaky_re_lu_15/LeakyRelu:0', description="created by layer 'leaky_re_lu_15'")	Target activation size: (64, 64, 256)
+2023-05-15 12:58:06,815 | INFO: getResNetBlock called. values:	imgDim: 256	kernelDim: (3, 3)	stride: (1, 1)	padding: same	input: KerasTensor(type_spec=TensorSpec(shape=(None, 64, 64, 256), dtype=tf.float32, name=None), name='leaky_re_lu_15/LeakyRelu:0', description="created by layer 'leaky_re_lu_15'")
+2023-05-15 12:58:06,816 | INFO: getRandomSeed called.
+2023-05-15 12:58:06,817 | INFO: seed generated: 345168654
+2023-05-15 12:58:06,877 | INFO: resLayer0 created. Value: KerasTensor(type_spec=TensorSpec(shape=(None, 64, 64, 256), dtype=tf.float32, name=None), name='activation_18/Relu:0', description="created by layer 'activation_18'")	Target activation size: (256,64,64)
+2023-05-15 12:58:06,939 | INFO: resLayer1 created. Value: KerasTensor(type_spec=TensorSpec(shape=(None, 64, 64, 256), dtype=tf.float32, name=None), name='activation_19/Relu:0', description="created by layer 'activation_19'")	Target activation size: (256,64,64)
+2023-05-15 12:58:06,944 | INFO: getResNetBlock called. values:	imgDim: 256	kernelDim: (3, 3)	stride: (1, 1)	padding: same	input: KerasTensor(type_spec=TensorSpec(shape=(None, 64, 64, 256), dtype=tf.float32, name=None), name='add_9/add:0', description="created by layer 'add_9'")
+2023-05-15 12:58:06,945 | INFO: getRandomSeed called.
+2023-05-15 12:58:06,946 | INFO: seed generated: 774686380
+2023-05-15 12:58:07,010 | INFO: resLayer0 created. Value: KerasTensor(type_spec=TensorSpec(shape=(None, 64, 64, 256), dtype=tf.float32, name=None), name='activation_20/Relu:0', description="created by layer 'activation_20'")	Target activation size: (256,64,64)
+2023-05-15 12:58:07,068 | INFO: resLayer1 created. Value: KerasTensor(type_spec=TensorSpec(shape=(None, 64, 64, 256), dtype=tf.float32, name=None), name='activation_21/Relu:0', description="created by layer 'activation_21'")	Target activation size: (256,64,64)
+2023-05-15 12:58:07,074 | INFO: getResNetBlock called. values:	imgDim: 256	kernelDim: (3, 3)	stride: (1, 1)	padding: same	input: KerasTensor(type_spec=TensorSpec(shape=(None, 64, 64, 256), dtype=tf.float32, name=None), name='add_10/add:0', description="created by layer 'add_10'")
+2023-05-15 12:58:07,075 | INFO: getRandomSeed called.
+2023-05-15 12:58:07,076 | INFO: seed generated: 271674877
+2023-05-15 12:58:07,136 | INFO: resLayer0 created. Value: KerasTensor(type_spec=TensorSpec(shape=(None, 64, 64, 256), dtype=tf.float32, name=None), name='activation_22/Relu:0', description="created by layer 'activation_22'")	Target activation size: (256,64,64)
+2023-05-15 12:58:07,189 | INFO: resLayer1 created. Value: KerasTensor(type_spec=TensorSpec(shape=(None, 64, 64, 256), dtype=tf.float32, name=None), name='activation_23/Relu:0', description="created by layer 'activation_23'")	Target activation size: (256,64,64)
+2023-05-15 12:58:07,195 | INFO: getResNetBlock called. values:	imgDim: 256	kernelDim: (3, 3)	stride: (1, 1)	padding: same	input: KerasTensor(type_spec=TensorSpec(shape=(None, 64, 64, 256), dtype=tf.float32, name=None), name='add_11/add:0', description="created by layer 'add_11'")
+2023-05-15 12:58:07,197 | INFO: getRandomSeed called.
+2023-05-15 12:58:07,200 | INFO: seed generated: 837650169
+2023-05-15 12:58:07,259 | INFO: resLayer0 created. Value: KerasTensor(type_spec=TensorSpec(shape=(None, 64, 64, 256), dtype=tf.float32, name=None), name='activation_24/Relu:0', description="created by layer 'activation_24'")	Target activation size: (256,64,64)
+2023-05-15 12:58:07,317 | INFO: resLayer1 created. Value: KerasTensor(type_spec=TensorSpec(shape=(None, 64, 64, 256), dtype=tf.float32, name=None), name='activation_25/Relu:0', description="created by layer 'activation_25'")	Target activation size: (256,64,64)
+2023-05-15 12:58:07,323 | INFO: getResNetBlock called. values:	imgDim: 256	kernelDim: (3, 3)	stride: (1, 1)	padding: same	input: KerasTensor(type_spec=TensorSpec(shape=(None, 64, 64, 256), dtype=tf.float32, name=None), name='add_12/add:0', description="created by layer 'add_12'")
+2023-05-15 12:58:07,324 | INFO: getRandomSeed called.
+2023-05-15 12:58:07,325 | INFO: seed generated: 734832084
+2023-05-15 12:58:07,381 | INFO: resLayer0 created. Value: KerasTensor(type_spec=TensorSpec(shape=(None, 64, 64, 256), dtype=tf.float32, name=None), name='activation_26/Relu:0', description="created by layer 'activation_26'")	Target activation size: (256,64,64)
+2023-05-15 12:58:07,438 | INFO: resLayer1 created. Value: KerasTensor(type_spec=TensorSpec(shape=(None, 64, 64, 256), dtype=tf.float32, name=None), name='activation_27/Relu:0', description="created by layer 'activation_27'")	Target activation size: (256,64,64)
+2023-05-15 12:58:07,444 | INFO: getResNetBlock called. values:	imgDim: 256	kernelDim: (3, 3)	stride: (1, 1)	padding: same	input: KerasTensor(type_spec=TensorSpec(shape=(None, 64, 64, 256), dtype=tf.float32, name=None), name='add_13/add:0', description="created by layer 'add_13'")
+2023-05-15 12:58:07,447 | INFO: getRandomSeed called.
+2023-05-15 12:58:07,448 | INFO: seed generated: 480746239
+2023-05-15 12:58:07,505 | INFO: resLayer0 created. Value: KerasTensor(type_spec=TensorSpec(shape=(None, 64, 64, 256), dtype=tf.float32, name=None), name='activation_28/Relu:0', description="created by layer 'activation_28'")	Target activation size: (256,64,64)
+2023-05-15 12:58:07,563 | INFO: resLayer1 created. Value: KerasTensor(type_spec=TensorSpec(shape=(None, 64, 64, 256), dtype=tf.float32, name=None), name='activation_29/Relu:0', description="created by layer 'activation_29'")	Target activation size: (256,64,64)
+2023-05-15 12:58:07,570 | INFO: getResNetBlock called. values:	imgDim: 256	kernelDim: (3, 3)	stride: (1, 1)	padding: same	input: KerasTensor(type_spec=TensorSpec(shape=(None, 64, 64, 256), dtype=tf.float32, name=None), name='add_14/add:0', description="created by layer 'add_14'")
+2023-05-15 12:58:07,572 | INFO: getRandomSeed called.
+2023-05-15 12:58:07,572 | INFO: seed generated: 677611909
+2023-05-15 12:58:07,626 | INFO: resLayer0 created. Value: KerasTensor(type_spec=TensorSpec(shape=(None, 64, 64, 256), dtype=tf.float32, name=None), name='activation_30/Relu:0', description="created by layer 'activation_30'")	Target activation size: (256,64,64)
+2023-05-15 12:58:07,684 | INFO: resLayer1 created. Value: KerasTensor(type_spec=TensorSpec(shape=(None, 64, 64, 256), dtype=tf.float32, name=None), name='activation_31/Relu:0', description="created by layer 'activation_31'")	Target activation size: (256,64,64)
+2023-05-15 12:58:07,690 | INFO: getResNetBlock called. values:	imgDim: 256	kernelDim: (3, 3)	stride: (1, 1)	padding: same	input: KerasTensor(type_spec=TensorSpec(shape=(None, 64, 64, 256), dtype=tf.float32, name=None), name='add_15/add:0', description="created by layer 'add_15'")
+2023-05-15 12:58:07,691 | INFO: getRandomSeed called.
+2023-05-15 12:58:07,692 | INFO: seed generated: 370993925
+2023-05-15 12:58:07,755 | INFO: resLayer0 created. Value: KerasTensor(type_spec=TensorSpec(shape=(None, 64, 64, 256), dtype=tf.float32, name=None), name='activation_32/Relu:0', description="created by layer 'activation_32'")	Target activation size: (256,64,64)
+2023-05-15 12:58:07,811 | INFO: resLayer1 created. Value: KerasTensor(type_spec=TensorSpec(shape=(None, 64, 64, 256), dtype=tf.float32, name=None), name='activation_33/Relu:0', description="created by layer 'activation_33'")	Target activation size: (256,64,64)
+2023-05-15 12:58:07,820 | INFO: getResNetBlock called. values:	imgDim: 256	kernelDim: (3, 3)	stride: (1, 1)	padding: same	input: KerasTensor(type_spec=TensorSpec(shape=(None, 64, 64, 256), dtype=tf.float32, name=None), name='add_16/add:0', description="created by layer 'add_16'")
+2023-05-15 12:58:07,821 | INFO: getRandomSeed called.
+2023-05-15 12:58:07,821 | INFO: seed generated: 757837724
+2023-05-15 12:58:07,874 | INFO: resLayer0 created. Value: KerasTensor(type_spec=TensorSpec(shape=(None, 64, 64, 256), dtype=tf.float32, name=None), name='activation_34/Relu:0', description="created by layer 'activation_34'")	Target activation size: (256,64,64)
+2023-05-15 12:58:07,931 | INFO: resLayer1 created. Value: KerasTensor(type_spec=TensorSpec(shape=(None, 64, 64, 256), dtype=tf.float32, name=None), name='activation_35/Relu:0', description="created by layer 'activation_35'")	Target activation size: (256,64,64)
+2023-05-15 12:58:08,054 | INFO: Generator Summary: <bound method Model.summary of <keras.engine.functional.Functional object at 0x0000024011065D20>>
+2023-05-15 12:58:08,096 | DEBUG: Saved model to json file
