@@ -68,15 +68,15 @@ def make_generator(imgDim:tuple|list, hyperparameters:tuple|list, num_res_blocks
 
     #adds x amount of residual layers. 9 for 256x256 TODO: verify math and find evidence to back up. !!!STRIDE MUST BE (1,1) given everything else is standard
     for _ in range(num_res_blocks):
-        layer = get_resnet_block(imgDim[0], kernel_dim2, stride1, padding, epsilon, layer) #when finished, layer's activation size should be (64,64,256)
+        layer = get_resnet_block(imgDim[0], kernel_dim2, stride1, epsilon, layer) #when finished, layer's activation size should be (64,64,256)
     logger.debug(f'resnet block completed. Layer: {layer}\tTarget activation size: (64, 64, 256)')
 
     #we transpose to upscale the image. Every conv2D layer decreases the dimension of the image. These two layers restore the original dimensions
-    layer = keras.layers.Conv2DTranspose(filters = filters*2, kernel_size = kernel_dim2, strides = stride2, padding = padding, output_padding = (1,1), kernel_initializer = weight_init)(layer)
+    layer = keras.layers.Conv2DTranspose(filters = filters*2, kernel_size = kernel_dim2, strides = stride2, padding = 'same', output_padding = (1,1), kernel_initializer = weight_init)(layer)
     layer = norm_and_activation(epsilon=epsilon, alpha=alpha, prev_layer=layer)
     logger.debug(f'first transposed Conv2D layer generated. Layer: {layer}') #TODO get target size
 
-    layer = keras.layers.Conv2DTranspose(filters = filters, kernel_size = kernel_dim2, strides = stride2, padding = padding, output_padding = (1,1), kernel_initializer = weight_init)(layer)
+    layer = keras.layers.Conv2DTranspose(filters = filters, kernel_size = kernel_dim2, strides = stride2, padding = 'same', output_padding = (1,1), kernel_initializer = weight_init)(layer)
     layer = norm_and_activation(epsilon=epsilon, alpha=alpha, prev_layer=layer)
     logger.debug(f'final transposed Conv2D layer generated. Layer: {layer}') #TODO get target size
 
@@ -136,6 +136,7 @@ def get_resnet_block(img_dim:int, kernel_dim:tuple|list, stride:tuple|list, epsi
 makes a discriminator CNN for CycleGAN
 imgDim: a tuple/list that represents the dimensions of the input. (should be x,y,RGB)
 hyperparameterData: a tuple/list that represents an amount of hyperparameters for experimentation
+i: a char, representing if it is generator A or B
 '''
 def make_discriminator(imgDim:tuple|list, hyperparameters:tuple|list, i:str):
     logger.debug(f'makeDiscriminator called.\timgDim: {imgDim}\thyperparameterData: {hyperparameters}')

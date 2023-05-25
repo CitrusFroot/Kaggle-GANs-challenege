@@ -16,11 +16,11 @@ def main():
   visualizeData(monetData, 1)
   visualizeData(photoData, 0)
 
-  discriminatorA = GAN.makeDiscriminator(IMAGE_SIZE, HYPERPARAMETER_DATA) #monet
-  generatorA     = GAN.makeGenerator(IMAGE_SIZE, HYPERPARAMETER_DATA, NUM_RES_BLOCKS)
+  discriminatorA = GAN.make_discriminator(IMAGE_SIZE, HYPERPARAMETER_DATA, 'A') #monet
+  generatorA     = GAN.make_generator(IMAGE_SIZE, HYPERPARAMETER_DATA, NUM_RES_BLOCKS, 'A')
 
-  discriminatorB = GAN.makeDiscriminator(IMAGE_SIZE, HYPERPARAMETER_DATA) #normal
-  generatorB     = GAN.makeGenerator(IMAGE_SIZE, HYPERPARAMETER_DATA, NUM_RES_BLOCKS)
+  discriminatorB = GAN.make_discriminator(IMAGE_SIZE, HYPERPARAMETER_DATA, 'B') #normal
+  generatorB     = GAN.make_generator(IMAGE_SIZE, HYPERPARAMETER_DATA, NUM_RES_BLOCKS, 'B')
 
 #loads image data from files
 #returns: 2 tf.data.Dataset objects, one holding the training data and the other holding images to be transformed
